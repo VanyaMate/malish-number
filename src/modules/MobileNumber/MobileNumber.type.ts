@@ -1,9 +1,10 @@
 export type MobileNumberSubscribe =
-    'input' | 'valid';
+    'init' | 'input' | 'valid';
 
-export type MobileNumberType = {
+export type MobileNumberOptions = {
     prefix: string;
     length: number;
+    initialValue?: string;
 }
 
 export type MobileNumberSubscribers = {

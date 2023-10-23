@@ -1,40 +1,31 @@
 import { MobileNumber } from '../MobileNumber.ts';
 import {
-    MobileNumberCallbackProps,
+    MobileNumberCallbackProps, MobileNumberOptions,
 } from '../MobileNumber.type.ts';
-import { MobileNumberValidatorResponse } from '../MobileNumberValidator.type.ts';
+import { IMobileNumberValidator } from '../MobileNumberValidator.interface.ts';
 
 
 export class LocalMobileNumber extends MobileNumber {
-    public clear (): Promise<MobileNumberCallbackProps> {
-        this._number = '';
-        return this._startEvents(this._getFull());
+    constructor (type: MobileNumberOptions, validator: IMobileNumberValidator) {
+        super(type, validator);
     }
 
-    public async get (): Promise<MobileNumberCallbackProps> {
-        const number: string                       = this._getFull();
-        const valid: MobileNumberValidatorResponse = await this._validate(number);
-        return {
-            ...valid,
-            number,
-        };
+    public clear (): Promise<MobileNumberCallbackProps> {
+        this._number = '';
+        return this._startEvents(this._getFullNumber());
     }
 
     public pop (): Promise<MobileNumberCallbackProps> {
         this._number = this._number.slice(0, this._number.length - 1);
-        return this._startEvents(this._getFull());
+        return this._startEvents(this._getFullNumber());
     }
 
     public async push (digit: string | number): Promise<MobileNumberCallbackProps> {
         const valid: boolean = await this._validator.digit(digit);
-        if (valid) {
+        if (valid && this._number.length < this._options.length) {
             this._number += digit;
-            return this._startEvents(this._getFull());
+            return this._startEvents(this._getFullNumber());
         }
-        return {
-            number : this._getFull(),
-            valid  : false,
-            message: '',
-        };
+        return this._getFullData();
     }
 }

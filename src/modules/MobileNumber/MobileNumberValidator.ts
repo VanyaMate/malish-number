@@ -1,10 +1,10 @@
-import { MobileNumberType } from './MobileNumber.type.ts';
+import { MobileNumberOptions } from './MobileNumber.type.ts';
 import { IMobileNumberValidator } from './MobileNumberValidator.interface.ts';
 import { MobileNumberValidatorResponse } from './MobileNumberValidator.type.ts';
 
 
 export abstract class MobileNumberValidator implements IMobileNumberValidator {
-    protected constructor (protected readonly _type: MobileNumberType) {
+    protected constructor (protected readonly _type: MobileNumberOptions) {
     }
 
     public async digit (number: string | number): Promise<boolean> {

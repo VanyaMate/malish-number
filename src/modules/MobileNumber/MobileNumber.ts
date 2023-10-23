@@ -2,7 +2,7 @@ import { IMobileNumber } from './MobileNumber.interface.ts';
 import {
     MobileNumberCallback,
     MobileNumberCallbackProps,
-    MobileNumberSubscribe, MobileNumberSubscribers, MobileNumberType,
+    MobileNumberSubscribe, MobileNumberSubscribers, MobileNumberOptions,
 } from './MobileNumber.type.ts';
 import { IMobileNumberValidator } from './MobileNumberValidator.interface.ts';
 import { MobileNumberValidatorResponse } from './MobileNumberValidator.type.ts';
@@ -10,24 +10,36 @@ import { MobileNumberValidatorResponse } from './MobileNumberValidator.type.ts';
 
 export abstract class MobileNumber implements IMobileNumber {
     protected _number: string                       = '';
+    protected _valid: MobileNumberValidatorResponse = { valid: false, message: '' };
     protected _subscribers: MobileNumberSubscribers = {
         input: [],
         valid: [],
+        init : [],
     };
 
     protected constructor (
-        protected readonly _type: MobileNumberType,
+        protected readonly _options: MobileNumberOptions,
         protected readonly _validator: IMobileNumberValidator,
     ) {
+        this._number = this._options.initialValue ?? '';
+        this._validator.validate(this._getFullNumber()).then((response) => {
+            this._valid = response;
+            this._event('init', {
+                number: this._getFullNumber(),
+                ...this._valid,
+            });
+        });
     }
 
     public abstract clear (): Promise<MobileNumberCallbackProps>;
 
-    public abstract get (): Promise<MobileNumberCallbackProps>;
-
     public abstract pop (): Promise<MobileNumberCallbackProps>;
 
     public abstract push (digit: string | number): Promise<MobileNumberCallbackProps>;
+
+    public get (): MobileNumberCallbackProps {
+        return this._getFullData();
+    }
 
     public subscribe (type: MobileNumberSubscribe, callback: MobileNumberCallback): void {
         this._subscribers[type].push(callback);
@@ -38,8 +50,15 @@ export abstract class MobileNumber implements IMobileNumber {
         this._subscribers[type] = this._subscribers[type].filter((item) => item !== callback);
     }
 
-    protected _getFull (): string {
-        return this._type.prefix + this._number;
+    protected _getFullData (): MobileNumberCallbackProps {
+        return {
+            ...this._valid,
+            number: this._number,
+        };
+    }
+
+    protected _getFullNumber (): string {
+        return this._options.prefix + this._number;
     }
 
     protected _validate (number: string): Promise<MobileNumberValidatorResponse> {
@@ -52,9 +71,8 @@ export abstract class MobileNumber implements IMobileNumber {
 
     protected _startEvents (number: string): Promise<MobileNumberCallbackProps> {
         this._event('input', {
-            number : number,
-            valid  : false,
-            message: '',
+            ...this._getFullData(),
+            number: number,
         });
 
         return this._validate(number).then((response) => {
