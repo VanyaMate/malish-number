@@ -1,8 +1,8 @@
-import { MobileNumber } from './MobileNumber.ts';
+import { MobileNumber } from '../MobileNumber.ts';
 import {
     MobileNumberCallbackProps,
-} from './MobileNumber.type.ts';
-import { MobileNumberValidatorResponse } from './MobileNumberValidator.type.ts';
+} from '../MobileNumber.type.ts';
+import { MobileNumberValidatorResponse } from '../MobileNumberValidator.type.ts';
 
 
 export class LocalMobileNumber extends MobileNumber {
