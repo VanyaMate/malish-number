@@ -45,8 +45,10 @@ const App = () => {
     const onValid = useCallback((props: MobileNumberCallbackProps) => {
         setValid(props.valid);
         setValidMessage(props.message);
-        setValidTest(false);
-    }, []);
+        if (props.number === currentNumber) {
+            setValidTest(false);
+        }
+    }, [ currentNumber ]);
 
     useEffect(() => {
         number.subscribe('init', onInit);
@@ -58,7 +60,7 @@ const App = () => {
             number.unsubscribe('input', onInput);
             number.unsubscribe('valid', onValid);
         };
-    }, []);
+    }, [ currentNumber ]);
 
     return (
         <div>

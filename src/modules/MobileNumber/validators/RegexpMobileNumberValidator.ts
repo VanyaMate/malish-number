@@ -8,21 +8,25 @@ export class RegexpMobileNumberValidator extends MobileNumberValidator {
         super(type);
     }
 
-    public async validate (number: string): Promise<MobileNumberValidatorResponse> {
-        const regexp: RegExp = new RegExp(`^${this._formatPrefix(this._type.prefix)}\\d{${this._type.length}}$`);
-        const valid: boolean = regexp.test(number);
-        // условно
-        if (valid) {
-            return {
-                valid  : true,
-                message: '',
-            };
-        } else {
-            return {
-                valid  : false,
-                message: 'Номер не правильный',
-            };
-        }
+    public validate (number: string): Promise<MobileNumberValidatorResponse> {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const regexp: RegExp = new RegExp(`^${this._formatPrefix(this._type.prefix)}\\d{${this._type.length}}$`);
+                const valid: boolean = regexp.test(number);
+                // условно
+                if (valid) {
+                    resolve({
+                        valid  : true,
+                        message: '',
+                    });
+                } else {
+                    resolve({
+                        valid  : false,
+                        message: 'Номер не правильный',
+                    });
+                }
+            }, 500);
+        });
     }
 
     private _formatPrefix (prefix: string): string {
