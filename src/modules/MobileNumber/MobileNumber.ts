@@ -5,15 +5,14 @@ import {
     MobileNumberSubscribe, MobileNumberSubscribers, MobileNumberType,
 } from './MobileNumber.type.ts';
 import { IMobileNumberValidator } from './MobileNumberValidator.interface.ts';
+import { MobileNumberValidatorResponse } from './MobileNumberValidator.type.ts';
 
 
 export abstract class MobileNumber implements IMobileNumber {
-    protected _state: string                        = '';
+    protected _number: string                       = '';
     protected _subscribers: MobileNumberSubscribers = {
-        input  : [],
-        invalid: [],
-        change : [],
-        valid  : [],
+        input: [],
+        valid: [],
     };
 
     protected constructor (
@@ -30,7 +29,42 @@ export abstract class MobileNumber implements IMobileNumber {
 
     public abstract push (digit: string | number): Promise<MobileNumberCallbackProps>;
 
-    public abstract subscribe (type: MobileNumberSubscribe, callback: MobileNumberCallback): void;
+    public subscribe (type: MobileNumberSubscribe, callback: MobileNumberCallback): void {
+        this._subscribers[type].push(callback);
+    }
 
-    public abstract unsubscribe (type: MobileNumberSubscribe, callback: MobileNumberCallback): void;
+
+    public unsubscribe (type: MobileNumberSubscribe, callback: MobileNumberCallback): void {
+        this._subscribers[type] = this._subscribers[type].filter((item) => item !== callback);
+    }
+
+    protected _getFull (): string {
+        return this._type.prefix + this._number;
+    }
+
+    protected _validate (number: string): Promise<MobileNumberValidatorResponse> {
+        return this._validator.validate(number);
+    }
+
+    protected _event (type: MobileNumberSubscribe, props: MobileNumberCallbackProps): void {
+        this._subscribers[type].forEach((callback) => callback(props));
+    }
+
+    protected _startEvents (number: string): Promise<MobileNumberCallbackProps> {
+        this._event('input', {
+            number : number,
+            valid  : false,
+            message: '',
+        });
+
+        return this._validate(number).then((response) => {
+            const props: MobileNumberCallbackProps = {
+                number: number,
+                ...response,
+            };
+
+            this._event('valid', props);
+            return props;
+        });
+    }
 }

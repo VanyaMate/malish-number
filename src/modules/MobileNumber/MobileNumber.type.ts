@@ -1,5 +1,5 @@
 export type MobileNumberSubscribe =
-    'input' | 'change' | 'valid' | 'invalid';
+    'input' | 'valid';
 
 export type MobileNumberType = {
     prefix: string;
@@ -7,13 +7,13 @@ export type MobileNumberType = {
 }
 
 export type MobileNumberSubscribers = {
-    [key in MobileNumberSubscribe]: MobileNumberCallback[]
+    [key in MobileNumberSubscribe]: MobileNumberCallback[];
 }
 
 export type MobileNumberCallbackProps = {
     valid: boolean;
     message: string;
-    value: string;
+    number: string;
 }
 
 export type MobileNumberCallback =
