@@ -1,10 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import MobileNumberView from './components/MobileNumberView/MobileNumberView.tsx';
 import { IMobileNumber } from './modules/MobileNumber/MobileNumber.interface.ts';
 import {
     MobileNumberCallbackProps,
     MobileNumberOptions,
 } from './modules/MobileNumber/MobileNumber.type.ts';
 import { LocalMobileNumber } from './modules/MobileNumber/mobileNumbers/LocalMobileNumber.ts';
+import { IMobileNumberTemplate } from './modules/MobileNumber/MobileNumberTemplate.interface.ts';
+import {
+    ByTemplateMobileNumberTemplate,
+} from './modules/MobileNumber/templates/ByTemplateMobileNumberTemplate.ts';
 import {
     RegexpMobileNumberValidator,
 } from './modules/MobileNumber/validators/RegexpMobileNumberValidator.ts';
@@ -24,6 +29,10 @@ const App = () => {
         },
         [],
     );
+
+    const template: IMobileNumberTemplate = useMemo(() => {
+        return new ByTemplateMobileNumberTemplate('+_ (___) ___-__-__');
+    }, []);
 
     const [ currentNumber, setCurrentNumber ] = useState<string>('');
     const [ valid, setValid ]                 = useState<boolean>(false);
@@ -82,6 +91,7 @@ const App = () => {
             <button style={ { padding: 5 } } onClick={ () => number.clear() }>CLEAR</button>
             <button style={ { padding: 5 } } onClick={ () => number.pop() }>POP</button>
             <hr/>
+            <MobileNumberView template={ template } number={ currentNumber }/>
             <hr/>
             <hr/>
         </div>
