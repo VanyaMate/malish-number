@@ -11,7 +11,7 @@ export type NumberKeyboardProps = {
 }
 
 const NumberKeyboard: React.FC<NumberKeyboardProps> = (props) => {
-    const { onInput, onClear, onPop } = props;
+    const { onInput, onClear } = props;
 
     return (
         <div className={ css.container }>
