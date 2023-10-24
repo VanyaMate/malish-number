@@ -1,19 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import MobileNumberView from './components/MobileNumberView/MobileNumberView.tsx';
-import { IMobileNumber } from './modules/MobileNumber/MobileNumber.interface.ts';
+import Button from '@/components/_ui/_button/Button/Button.tsx';
+import NumberKeyboard from '@/components/NumberKeyboard/NumberKeyboard.tsx';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import MobileNumberView from '@/components/MobileNumberView/MobileNumberView.tsx';
+import { IMobileNumber } from '@/modules/MobileNumber/MobileNumber.interface.ts';
 import {
     MobileNumberCallbackProps,
     MobileNumberOptions,
-} from './modules/MobileNumber/MobileNumber.type.ts';
-import { LocalMobileNumber } from './modules/MobileNumber/mobileNumbers/LocalMobileNumber.ts';
-import { IMobileNumberTemplate } from './modules/MobileNumber/MobileNumberTemplate.interface.ts';
-import { IMobileNumberValidator } from './modules/MobileNumber/MobileNumberValidator.interface.ts';
+} from '@/modules/MobileNumber/MobileNumber.type.ts';
+import { LocalMobileNumber } from '@/modules/MobileNumber/mobileNumbers/LocalMobileNumber.ts';
+import { IMobileNumberTemplate } from '@/modules/MobileNumber/MobileNumberTemplate.interface.ts';
+import { IMobileNumberValidator } from '@/modules/MobileNumber/MobileNumberValidator.interface.ts';
 import {
     ByTemplateMobileNumberTemplate,
-} from './modules/MobileNumber/templates/ByTemplateMobileNumberTemplate.ts';
+} from '@/modules/MobileNumber/templates/ByTemplateMobileNumberTemplate.ts';
 import {
     RegexpMobileNumberValidator,
-} from './modules/MobileNumber/validators/RegexpMobileNumberValidator.ts';
+} from '@/modules/MobileNumber/validators/RegexpMobileNumberValidator.ts';
 
 
 const App = () => {
@@ -68,7 +70,9 @@ const App = () => {
     }, [ currentNumber ]);
 
     const onKeydown = useCallback(async (e: KeyboardEvent) => {
-        if (await mobileNumberValidator.digit(e.key)) {
+        if (e.key === 'Backspace') {
+            await mobileNumberModule.pop();
+        } else if (await mobileNumberValidator.digit(e.key)) {
             await mobileNumberModule.push(e.key);
         }
     }, []);
@@ -87,6 +91,18 @@ const App = () => {
         };
     }, [ currentNumber ]);
 
+    const keyboardOnInput = useCallback((number: number) => {
+        mobileNumberModule.push(number);
+    }, [ mobileNumberModule ]);
+
+    const keyboardOnClear = useCallback(() => {
+        mobileNumberModule.clear();
+    }, [ mobileNumberModule ]);
+
+    const keyboardOnPop = useCallback(() => {
+        mobileNumberModule.pop();
+    }, [ mobileNumberModule ]);
+
     return (
         <div>
             [NUMBER]: { currentNumber }<br/>
@@ -94,19 +110,11 @@ const App = () => {
             [VALID_MESSAGE]: { validMessage }<br/>
             [VALID_TESTING]: { validTest.toString() }<br/>
             <hr/>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(0) }>0</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(1) }>1</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(2) }>2</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(3) }>3</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(4) }>4</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(5) }>5</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(6) }>6</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(7) }>7</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(8) }>8</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.push(9) }>9</button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.clear() }>CLEAR
-            </button>
-            <button style={ { padding: 5 } } onClick={ () => mobileNumberModule.pop() }>POP</button>
+            <NumberKeyboard
+                onInput={ keyboardOnInput }
+                onClear={ keyboardOnClear }
+                onPop={ keyboardOnPop }
+            />
             <hr/>
             <MobileNumberView template={ mobileNumberTemplate } number={ currentNumber }/>
             <hr/>

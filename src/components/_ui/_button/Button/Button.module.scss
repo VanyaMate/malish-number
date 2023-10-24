@@ -1,0 +1,27 @@
+@import "src/styles/palette";
+
+.container {
+    padding: 12px;
+    border: 2px solid $black;
+    color: $black;
+    outline: none;
+    background: transparent;
+    cursor: pointer;
+    transition: .1s;
+    text-transform: uppercase;
+    font-weight: bold;
+
+    &:hover {
+        background: $black;
+        color: $white;
+    }
+
+    &.loading {
+
+    }
+
+    &.primary {
+        background: $black;
+        color: $white;
+    }
+}

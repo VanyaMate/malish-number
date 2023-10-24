@@ -1,12 +1,20 @@
 import React from 'react';
+import { cn } from '@/helpers/react/classname.helper.ts';
+import css from './Button.module.scss';
 
 
-const Button = () => {
+export type ButtonProps = {
+    primary?: boolean;
+    loading?: boolean;
+} & React.HTMLAttributes<HTMLButtonElement>;
+
+const Button: React.FC<ButtonProps> = (props) => {
+    const { primary, loading, className, ...other } = props;
+
     return (
-        <div>
-            Button
-        </div>
+        <button { ...other }
+                className={ cn(className, css.container, primary && css.primary) }/>
     );
 };
 
-export default Button;
+export default React.memo(Button);

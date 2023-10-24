@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
     IMobileNumberTemplate,
-} from '../../modules/MobileNumber/MobileNumberTemplate.interface.ts';
+} from '@/modules/MobileNumber/MobileNumberTemplate.interface.ts';
+import css from './MobileNumberView.module.scss';
 
 
 export type MobileNumberViewProps = {
@@ -18,8 +19,8 @@ const MobileNumberView: React.FC<MobileNumberViewProps> = (props) => {
     }, [ number ]);
 
     return (
-        <div>
-            [TEMPLATE]: { value }
+        <div className={ css.container }>
+            { value }
         </div>
     );
 };
