@@ -11,10 +11,11 @@ export class RegexpMobileNumberValidator extends MobileNumberValidator {
     public validate (number: string): Promise<MobileNumberValidatorResponse> {
         return new Promise((resolve) => {
             setTimeout(() => {
-                const regexp: RegExp = new RegExp(`^${this._formatPrefix(this._type.prefix)}\\d{${this._type.length}}$`);
-                const valid: boolean = regexp.test(number);
-                // условно
-                if (valid) {
+                const regexp: RegExp    = new RegExp(`^${this._formatPrefix(this._type.prefix)}\\d{${this._type.length}}$`);
+                const valid: boolean    = regexp.test(number);
+                // Условная валидация. Если номер заканчивается на 77 - ошибка.
+                const numberEnd: string = number.slice(number.length - 2, number.length);
+                if (valid && numberEnd !== '77') {
                     resolve({
                         valid  : true,
                         message: '',

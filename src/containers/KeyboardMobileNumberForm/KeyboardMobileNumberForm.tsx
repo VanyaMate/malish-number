@@ -51,6 +51,10 @@ const KeyboardMobileNumberForm = () => {
     const validForm: boolean                  = useMemo(() => {
         return !validTest && valid;
     }, [ valid, validTest ]);
+    const showError: boolean                  = useMemo(() => {
+        return !validTest && !valid && (currentNumber.length === 12);
+    }, [ valid, validTest, currentNumber ]);
+
 
     const onInit = useCallback((props: MobileNumberCallbackProps) => {
         setCurrentNumber(props.number);
@@ -110,7 +114,7 @@ const KeyboardMobileNumberForm = () => {
         <div className={ css.container }>
             <h2 className={ css.title }>Введите ваш номер мобильного телефона</h2>
             <MobileNumberView template={ mobileNumberTemplate } number={ currentNumber }
-                              className={ validMessage && css.errorText }/>
+                              className={ cn(showError && css.errorText) }/>
             <p className={ css.desc }>и с Вами свяжется наш менеждер для дальнейшей консультации</p>
             <NumberKeyboard
                 onInput={ keyboardOnInput }
@@ -118,7 +122,7 @@ const KeyboardMobileNumberForm = () => {
                 onPop={ keyboardOnPop }
             />
             {
-                validMessage
+                showError
                 ? <div
                     className={ cn(css.overbutton, css.error, css.errorText) }>{ validMessage }</div>
                 : <Checkbox label={ 'Согласие на обработку персональных данных' }
