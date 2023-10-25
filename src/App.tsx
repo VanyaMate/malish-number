@@ -1,3 +1,4 @@
+import Checkbox from '@/components/_ui/_input/Checkbox/Checkbox.tsx';
 import NumberKeyboard from '@/components/NumberKeyboard/NumberKeyboard.tsx';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import MobileNumberView from '@/components/MobileNumberView/MobileNumberView.tsx';
@@ -117,6 +118,7 @@ const App = () => {
             <hr/>
             <MobileNumberView template={ mobileNumberTemplate } number={ currentNumber }/>
             <hr/>
+            <Checkbox label={ 'Согласие на обработку' } onChange={ console.log }/>
             <hr/>
         </div>
     );

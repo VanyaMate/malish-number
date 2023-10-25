@@ -1,0 +1,35 @@
+@import "src/styles/palette";
+
+.container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    cursor: pointer;
+
+    .box {
+        width: 30px;
+        height: 30px;
+        border: 2px solid $black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .mark {
+            transform: scale(0);
+            opacity: 0;
+            transition: .1s;
+        }
+
+        &.checked {
+            .mark {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    }
+
+    .label {
+        color: rgba(0, 0, 0, .5);
+    }
+}
