@@ -2,6 +2,7 @@ import Button from '@/components/_ui/_button/Button/Button.tsx';
 import Checkbox from '@/components/_ui/_input/Checkbox/Checkbox.tsx';
 import MobileNumberView from '@/components/MobileNumberView/MobileNumberView.tsx';
 import NumberKeyboard from '@/components/NumberKeyboard/NumberKeyboard.tsx';
+import { cn } from '@/helpers/react/classname.helper.ts';
 import { IMobileNumber } from '@/modules/MobileNumber/MobileNumber.interface.ts';
 import {
     MobileNumberCallbackProps,
@@ -47,6 +48,9 @@ const KeyboardMobileNumberForm = () => {
     const [ valid, setValid ]                 = useState<boolean>(false);
     const [ validMessage, setValidMessage ]   = useState<string>('');
     const [ validTest, setValidTest ]         = useState<boolean>(true);
+    const validForm: boolean                  = useMemo(() => {
+        return !validTest && valid;
+    }, [ valid, validTest ]);
 
     const onInit = useCallback((props: MobileNumberCallbackProps) => {
         setCurrentNumber(props.number);
@@ -105,18 +109,24 @@ const KeyboardMobileNumberForm = () => {
     return (
         <div className={ css.container }>
             <h2 className={ css.title }>Введите ваш номер мобильного телефона</h2>
-            <MobileNumberView template={ mobileNumberTemplate } number={ currentNumber }/>
+            <MobileNumberView template={ mobileNumberTemplate } number={ currentNumber }
+                              className={ validMessage && css.errorText }/>
             <p className={ css.desc }>и с Вами свяжется наш менеждер для дальнейшей консультации</p>
             <NumberKeyboard
                 onInput={ keyboardOnInput }
                 onClear={ keyboardOnClear }
                 onPop={ keyboardOnPop }
             />
-            <Checkbox label={ 'Согласие на обработку персональных данных' }
-                      onChange={ console.log }
-                      className={ css.checkbox }
-            />
-            <Button className={ css.button }>Отправить</Button>
+            {
+                validMessage
+                ? <div
+                    className={ cn(css.overbutton, css.error, css.errorText) }>{ validMessage }</div>
+                : <Checkbox label={ 'Согласие на обработку персональных данных' }
+                            onChange={ console.log }
+                            className={ cn(css.checkbox, css.overbutton) }
+                />
+            }
+            <Button className={ css.button } disabled={ !validForm }>Отправить</Button>
         </div>
     );
 };

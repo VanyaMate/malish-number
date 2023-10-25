@@ -6,6 +6,7 @@ import css from './Button.module.scss';
 export type ButtonProps = {
     primary?: boolean;
     loading?: boolean;
+    disabled?: boolean;
 } & React.HTMLAttributes<HTMLButtonElement>;
 
 const Button: React.FC<ButtonProps> = (props) => {
