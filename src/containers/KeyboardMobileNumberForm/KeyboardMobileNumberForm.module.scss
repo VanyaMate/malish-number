@@ -1,0 +1,27 @@
+.container {
+    width: 286px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+
+    .title {
+        font-size: 26px;
+        font-weight: 400;
+        text-align: center;
+    }
+
+    .desc {
+        font-size: 14px;
+        font-weight: 400;
+        text-align: center;
+    }
+
+    .checkbox {
+        display: flex;
+        font-size: 14px;
+    }
+
+    .button {
+        display: block;
+    }
+}
