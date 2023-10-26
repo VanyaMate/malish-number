@@ -32,7 +32,6 @@ const KeyboardMobileNumberForm: React.FC<KeyboardMobileNumberFormProps> = (props
         return !validTest && !valid && (currentNumber.length === 12);
     }, [ valid, validTest, currentNumber ]);
 
-
     const onInit = useCallback((props: MobileNumberCallbackProps) => {
         setCurrentNumber(props.number);
         setValid(props.valid);

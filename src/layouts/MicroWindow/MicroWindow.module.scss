@@ -1,6 +1,8 @@
 .container {
     width: 1280px;
     height: 720px;
+    position: relative;
+    overflow: hidden;
 
     //  TODO: Временно
     background: #f0f0f0;
