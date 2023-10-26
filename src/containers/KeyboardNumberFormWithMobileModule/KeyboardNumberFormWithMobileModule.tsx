@@ -14,7 +14,12 @@ import {
 import React, { useCallback, useMemo } from 'react';
 
 
-const KeyboardNumberFormWithMobileModule = () => {
+export type KeyboardNumberFormWithMobileModuleProps = {
+    disableKeyboard?: boolean;
+}
+
+const KeyboardNumberFormWithMobileModule: React.FC<KeyboardNumberFormWithMobileModuleProps> = (props) => {
+    const { disableKeyboard }                           = props;
     const mobileNumberOptions: MobileNumberOptions      = useMemo(() => {
         return {
             prefix: '+7',
@@ -51,6 +56,7 @@ const KeyboardNumberFormWithMobileModule = () => {
             mobileModule={ mobileNumberModule }
             template={ mobileNumberTemplate }
             onSubmit={ sendNumber }
+            disableKeyboard={ disableKeyboard }
         />
     );
 };

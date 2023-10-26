@@ -28,7 +28,9 @@ const App = () => {
                     } }>
                     <Button onClick={ () => setOpened(true) }>Open</Button>
                     <Drawer opened={ opened } onClose={ () => setOpened(false) }>
-                        <KeyboardNumberFormWithMobileModule/>
+                        <KeyboardNumberFormWithMobileModule
+                            disableKeyboard={ !opened }
+                        />
                     </Drawer>
                 </MicroWindow>
             </div>
