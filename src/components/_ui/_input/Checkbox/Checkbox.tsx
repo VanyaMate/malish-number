@@ -17,7 +17,7 @@ const Checkbox: React.FC<CheckboxProps> = (props) => {
     const onClickHandler = useCallback(() => {
         onChange(!status);
         setStatus((prev) => !prev);
-    }, []);
+    }, [ status ]);
 
     return (
         <div className={ cn(css.container, className) } onClick={ onClickHandler }>

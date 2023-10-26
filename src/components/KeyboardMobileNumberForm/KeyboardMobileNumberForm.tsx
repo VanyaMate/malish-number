@@ -14,18 +14,21 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 export type KeyboardMobileNumberFormProps = {
     mobileModule: IMobileNumber,
     template: IMobileNumberTemplate,
+    onSubmit: (number: string) => Promise<any>;
 }
 
 const KeyboardMobileNumberForm: React.FC<KeyboardMobileNumberFormProps> = (props) => {
-    const { mobileModule, template }          = props;
-    const [ currentNumber, setCurrentNumber ] = useState<string>('');
-    const [ valid, setValid ]                 = useState<boolean>(false);
-    const [ validMessage, setValidMessage ]   = useState<string>('');
-    const [ validTest, setValidTest ]         = useState<boolean>(true);
-    const validForm: boolean                  = useMemo(() => {
-        return !validTest && valid;
-    }, [ valid, validTest ]);
-    const showError: boolean                  = useMemo(() => {
+    const { mobileModule, template, onSubmit }      = props;
+    const [ currentNumber, setCurrentNumber ]       = useState<string>('');
+    const [ valid, setValid ]                       = useState<boolean>(false);
+    const [ validMessage, setValidMessage ]         = useState<string>('');
+    const [ validTest, setValidTest ]               = useState<boolean>(true);
+    const [ loading, setLoading ]                   = useState<boolean>(false);
+    const [ checkedAgreement, setCheckedAgreement ] = useState<boolean>(false);
+    const validForm: boolean                        = useMemo(() => {
+        return !validTest && valid && checkedAgreement;
+    }, [ valid, validTest, checkedAgreement ]);
+    const showError: boolean                        = useMemo(() => {
         return !validTest && !valid && (currentNumber.length === 12);
     }, [ valid, validTest, currentNumber ]);
 
@@ -50,24 +53,17 @@ const KeyboardMobileNumberForm: React.FC<KeyboardMobileNumberFormProps> = (props
         }
     }, [ currentNumber ]);
 
+    const onSubmitHandler = useCallback(() => {
+        setLoading(true);
+        onSubmit(currentNumber)
+            .finally(() => setLoading(false));
+    }, []);
+
     const onKeydown = useCallback(async (e: KeyboardEvent) => {
         if (e.key === 'Backspace') {
             await mobileModule.pop();
-        } else {
-            switch (e.key) {
-                case '0':
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                case '7':
-                case '8':
-                case '9':
-                    await mobileModule.push(e.key);
-                    break;
-            }
+        } else if (new RegExp(/^\d$/).test(e.key)) {
+            await mobileModule.push(e.key);
         }
     }, []);
 
@@ -113,13 +109,21 @@ const KeyboardMobileNumberForm: React.FC<KeyboardMobileNumberFormProps> = (props
                 ? <div
                     className={ cn(css.overbutton, css.error, css.errorText) }>{ validMessage }</div>
                 : <Checkbox label={ 'Согласие на обработку персональных данных' }
-                            onChange={ console.log }
+                            onChange={ setCheckedAgreement }
                             className={ cn(css.checkbox, css.overbutton) }
+                            initialState={ checkedAgreement }
                 />
             }
-            <Button className={ css.button } disabled={ !validForm }>Отправить</Button>
+            <Button
+                className={ css.button }
+                disabled={ !validForm }
+                loading={ loading }
+                onClick={ onSubmitHandler }
+            >
+                Отправить
+            </Button>
         </div>
     );
 };
 
-export default KeyboardMobileNumberForm;
+export default React.memo(KeyboardMobileNumberForm);

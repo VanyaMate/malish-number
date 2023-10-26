@@ -14,7 +14,13 @@ const Button: React.FC<ButtonProps> = (props) => {
 
     return (
         <button { ...other }
-                className={ cn(className, css.container, primary && css.primary, disabled && css.disabled) }/>
+                className={ cn(
+                    className,
+                    css.container,
+                    primary && css.primary,
+                    disabled && css.disabled,
+                    loading && css.loading,
+                ) }/>
     );
 };
 

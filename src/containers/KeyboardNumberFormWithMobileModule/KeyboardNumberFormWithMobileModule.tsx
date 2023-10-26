@@ -11,7 +11,7 @@ import {
 import {
     RegexpMobileNumberValidator,
 } from '@/modules/MobileNumber/validators/RegexpMobileNumberValidator.ts';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 
 const KeyboardNumberFormWithMobileModule = () => {
@@ -37,10 +37,20 @@ const KeyboardNumberFormWithMobileModule = () => {
         return new ByTemplateMobileNumberTemplate('+_(___)___-__-__');
     }, []);
 
+    const sendNumber = useCallback((number: string) => {
+        return new Promise<void>((resolve) => {
+            setTimeout(() => {
+                console.log('number send', number);
+                resolve();
+            }, 1000);
+        });
+    }, []);
+
     return (
         <KeyboardMobileNumberForm
             mobileModule={ mobileNumberModule }
             template={ mobileNumberTemplate }
+            onSubmit={ sendNumber }
         />
     );
 };
