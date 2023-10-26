@@ -10,11 +10,11 @@ export type ButtonProps = {
 } & React.HTMLAttributes<HTMLButtonElement>;
 
 const Button: React.FC<ButtonProps> = (props) => {
-    const { primary, loading, className, ...other } = props;
+    const { primary, loading, className, disabled, ...other } = props;
 
     return (
         <button { ...other }
-                className={ cn(className, css.container, primary && css.primary) }/>
+                className={ cn(className, css.container, primary && css.primary, disabled && css.disabled) }/>
     );
 };
 
