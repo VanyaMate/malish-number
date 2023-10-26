@@ -1,5 +1,5 @@
-import KeyboardMobileNumberForm
-    from '@/containers/KeyboardMobileNumberForm/KeyboardMobileNumberForm.tsx';
+import KeyboardNumberFormWithMobileModule
+    from '@/containers/KeyboardNumberFormWithMobileModule/KeyboardNumberFormWithMobileModule.tsx';
 import MicroWindow from '@/layouts/MicroWindow/MicroWindow.tsx';
 
 
@@ -17,7 +17,7 @@ const App = () => {
                 padding     : 20,
             } }>
                 <MicroWindow>
-                    <KeyboardMobileNumberForm/>
+                    <KeyboardNumberFormWithMobileModule/>
                 </MicroWindow>
             </div>
         </div>
