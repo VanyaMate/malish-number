@@ -23,7 +23,7 @@ export class RegexpMobileNumberValidator extends MobileNumberValidator {
                 } else {
                     resolve({
                         valid  : false,
-                        message: 'Номер не правильный',
+                        message: 'Неверно введён номер',
                     });
                 }
             }, 500);
