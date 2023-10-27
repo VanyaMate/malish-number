@@ -9,8 +9,8 @@ import {
     ByTemplateMobileNumberTemplate,
 } from '@/modules/MobileNumber/templates/ByTemplateMobileNumberTemplate.ts';
 import {
-    NumverifyMobileNumberValidator,
-} from '@/modules/MobileNumber/validators/NumverifyMobileNumberValidator.ts';
+    RegexpMobileNumberValidator,
+} from '@/modules/MobileNumber/validators/RegexpMobileNumberValidator.ts';
 import React, { useCallback, useMemo, useState } from 'react';
 import css from './KeyboardNumberFormWithMobileModule.module.scss';
 
@@ -27,14 +27,19 @@ const KeyboardNumberFormWithMobileModule: React.FC<KeyboardNumberFormWithMobileM
             length: 10,
         };
     }, []);
-    /*    const mobileNumberValidator: IMobileNumberValidator = useMemo(() => {
-     return new RegexpMobileNumberValidator(mobileNumberOptions);
-     }, [ mobileNumberOptions ]);*/
 
+    /**
+     * К сожадению через firebase не отпавляются запросы на http, так что обойдемся regexp. Но
+     * главное чтобы валидатор имплементировал интерфейс и всё будет работать одинаково.
+     */
     const mobileNumberValidator: IMobileNumberValidator = useMemo(() => {
-        return new NumverifyMobileNumberValidator();
+        return new RegexpMobileNumberValidator(mobileNumberOptions);
     }, [ mobileNumberOptions ]);
-    const mobileNumberModule: IMobileNumber             = useMemo(
+
+    /*    const mobileNumberValidator: IMobileNumberValidator = useMemo(() => {
+     return new NumverifyMobileNumberValidator();
+     }, [ mobileNumberOptions ]);*/
+    const mobileNumberModule: IMobileNumber           = useMemo(
         () => {
             return new LocalMobileNumber(
                 mobileNumberOptions,
@@ -43,10 +48,10 @@ const KeyboardNumberFormWithMobileModule: React.FC<KeyboardNumberFormWithMobileM
         },
         [ mobileNumberOptions, mobileNumberValidator ],
     );
-    const mobileNumberTemplate: IMobileNumberTemplate   = useMemo(() => {
+    const mobileNumberTemplate: IMobileNumberTemplate = useMemo(() => {
         return new ByTemplateMobileNumberTemplate('+_(___)___-__-__');
     }, []);
-    const [ successSended, setSuccessSended ]           = useState<boolean>(false);
+    const [ successSended, setSuccessSended ]         = useState<boolean>(false);
 
     const sendNumber = useCallback(() => {
         return new Promise<void>((resolve) => {
