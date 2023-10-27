@@ -19,10 +19,10 @@ export type KeyboardMobileNumberFormProps = {
 
 const KeyboardMobileNumberForm: React.FC<KeyboardMobileNumberFormProps> = (props) => {
     const { mobileModule, template, onSubmit, disableKeyboard } = props;
-    const [ currentNumber, setCurrentNumber ]                   = useState<string>('');
-    const [ valid, setValid ]                                   = useState<boolean>(false);
-    const [ validMessage, setValidMessage ]                     = useState<string>('');
-    const [ validTest, setValidTest ]                           = useState<boolean>(true);
+    const [ currentNumber, setCurrentNumber ]                   = useState<string>(mobileModule.get().number);
+    const [ valid, setValid ]                                   = useState<boolean>(mobileModule.get().valid);
+    const [ validMessage, setValidMessage ]                     = useState<string>(mobileModule.get().message);
+    const [ validTest, setValidTest ]                           = useState<boolean>(false);
     const [ loading, setLoading ]                               = useState<boolean>(false);
     const [ checkedAgreement, setCheckedAgreement ]             = useState<boolean>(false);
     const validForm: boolean                                    = useMemo(() => {
@@ -31,13 +31,6 @@ const KeyboardMobileNumberForm: React.FC<KeyboardMobileNumberFormProps> = (props
     const showError: boolean                                    = useMemo(() => {
         return !validTest && !valid && (currentNumber.length === 12);
     }, [ valid, validTest, currentNumber ]);
-
-    const onInit = useCallback((props: MobileNumberCallbackProps) => {
-        setCurrentNumber(props.number);
-        setValid(props.valid);
-        setValidMessage(props.message);
-        setValidTest(false);
-    }, []);
 
     const onInput = useCallback((props: MobileNumberCallbackProps) => {
         setCurrentNumber(props.number);
@@ -69,13 +62,11 @@ const KeyboardMobileNumberForm: React.FC<KeyboardMobileNumberFormProps> = (props
     }, [ disableKeyboard ]);
 
     useEffect(() => {
-        mobileModule.subscribe('init', onInit);
         mobileModule.subscribe('input', onInput);
         mobileModule.subscribe('valid', onValid);
         window.addEventListener('keydown', onKeydown);
 
         return () => {
-            mobileModule.unsubscribe('init', onInit);
             mobileModule.unsubscribe('input', onInput);
             mobileModule.unsubscribe('valid', onValid);
             window.removeEventListener('keydown', onKeydown);

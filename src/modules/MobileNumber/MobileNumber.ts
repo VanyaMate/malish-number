@@ -21,14 +21,17 @@ export abstract class MobileNumber implements IMobileNumber {
         protected readonly _options: MobileNumberOptions,
         protected readonly _validator: IMobileNumberValidator,
     ) {
-        this._number = this._options.initialValue ?? '';
-        this._validator.validate(this._getFullNumber()).then((response) => {
-            this._valid = response;
-            this._event('init', {
-                number: this._getFullNumber(),
-                ...this._valid,
+        this._number      = this._options.initialValue ?? '';
+        this._subscribers = this._options.subscribers ?? this._subscribers;
+
+        if (this._currentNumberIsFull()) {
+            this._validator.validate(this._getFullNumber()).then((response) => {
+                this._valid = response;
+                this._event('init', this._getFullData());
             });
-        });
+        } else {
+            this._event('init', this._getFullData());
+        }
     }
 
     public abstract clear (): Promise<MobileNumberCallbackProps>;
@@ -53,7 +56,7 @@ export abstract class MobileNumber implements IMobileNumber {
     protected _getFullData (): MobileNumberCallbackProps {
         return {
             ...this._valid,
-            number: this._number,
+            number: this._getFullNumber(),
         };
     }
 
@@ -61,7 +64,7 @@ export abstract class MobileNumber implements IMobileNumber {
         return this._options.prefix + this._number;
     }
 
-    protected _validate (number: string): Promise<MobileNumberValidatorResponse> {
+    protected async _validate (number: string): Promise<MobileNumberValidatorResponse> {
         return this._validator.validate(number);
     }
 
@@ -69,13 +72,13 @@ export abstract class MobileNumber implements IMobileNumber {
         this._subscribers[type].forEach((callback) => callback(props));
     }
 
-    protected _startEvents (number: string): Promise<MobileNumberCallbackProps> {
+    protected async _startEvents (number: string): Promise<MobileNumberCallbackProps> {
         this._event('input', {
             ...this._getFullData(),
             number: number,
         });
 
-        return this._validate(number).then((response) => {
+        return this._currentNumberIsFull() ? this._validate(number).then((response) => {
             const props: MobileNumberCallbackProps = {
                 number: number,
                 ...response,
@@ -83,6 +86,10 @@ export abstract class MobileNumber implements IMobileNumber {
 
             this._event('valid', props);
             return props;
-        });
+        }) : this._getFullData();
+    }
+
+    protected _currentNumberIsFull (): boolean {
+        return this._number.length === this._options.length;
     }
 }

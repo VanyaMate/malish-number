@@ -9,6 +9,9 @@ import {
     ByTemplateMobileNumberTemplate,
 } from '@/modules/MobileNumber/templates/ByTemplateMobileNumberTemplate.ts';
 import {
+    NumverifyMobileNumberValidator,
+} from '@/modules/MobileNumber/validators/NumverifyMobileNumberValidator.ts';
+import {
     RegexpMobileNumberValidator,
 } from '@/modules/MobileNumber/validators/RegexpMobileNumberValidator.ts';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -20,15 +23,19 @@ export type KeyboardNumberFormWithMobileModuleProps = {
 }
 
 const KeyboardNumberFormWithMobileModule: React.FC<KeyboardNumberFormWithMobileModuleProps> = (props) => {
-    const { disableKeyboard }                           = props;
-    const mobileNumberOptions: MobileNumberOptions      = useMemo(() => {
+    const { disableKeyboard }                      = props;
+    const mobileNumberOptions: MobileNumberOptions = useMemo(() => {
         return {
             prefix: '+7',
             length: 10,
         };
     }, []);
+    /*    const mobileNumberValidator: IMobileNumberValidator = useMemo(() => {
+     return new RegexpMobileNumberValidator(mobileNumberOptions);
+     }, [ mobileNumberOptions ]);*/
+
     const mobileNumberValidator: IMobileNumberValidator = useMemo(() => {
-        return new RegexpMobileNumberValidator(mobileNumberOptions);
+        return new NumverifyMobileNumberValidator();
     }, [ mobileNumberOptions ]);
     const mobileNumberModule: IMobileNumber             = useMemo(
         () => {

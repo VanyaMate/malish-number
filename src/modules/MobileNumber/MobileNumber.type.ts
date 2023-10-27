@@ -5,6 +5,7 @@ export type MobileNumberOptions = {
     prefix: string;
     length: number;
     initialValue?: string;
+    subscribers?: MobileNumberSubscribers;
 }
 
 export type MobileNumberSubscribers = {
