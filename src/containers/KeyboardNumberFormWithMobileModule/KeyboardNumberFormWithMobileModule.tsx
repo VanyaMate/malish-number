@@ -11,9 +11,6 @@ import {
 import {
     NumverifyMobileNumberValidator,
 } from '@/modules/MobileNumber/validators/NumverifyMobileNumberValidator.ts';
-import {
-    RegexpMobileNumberValidator,
-} from '@/modules/MobileNumber/validators/RegexpMobileNumberValidator.ts';
 import React, { useCallback, useMemo, useState } from 'react';
 import css from './KeyboardNumberFormWithMobileModule.module.scss';
 
