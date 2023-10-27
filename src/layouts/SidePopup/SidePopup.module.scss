@@ -1,0 +1,19 @@
+@import "src/styles/palette";
+@import "src/styles/transition";
+
+.container {
+    position: absolute;
+    right: 0;
+    bottom: 80px;
+    transform: translateX(0);
+    transition: $transition_slow ease-in-out;
+
+    &.closed {
+        transform: translateX(100%);
+    }
+
+    .content {
+        padding: 20px;
+        background: $blue;
+    }
+}

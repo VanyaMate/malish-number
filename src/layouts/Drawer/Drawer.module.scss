@@ -1,4 +1,5 @@
 @import "src/styles/palette";
+@import "src/styles/transition";
 
 // Зато красиво
 
@@ -13,7 +14,7 @@
     }
 }
 
-$animation_time: .6s;
+$animation_time: $transition_slow;
 
 .container {
     position: absolute;
@@ -85,9 +86,7 @@ $animation_time: .6s;
         background: $white;
 
         &:hover {
-            transform: scale(1.1);
-            background: $white;
-            color: $black;
+            background: $black;
         }
     }
 }
