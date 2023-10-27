@@ -2,8 +2,7 @@ import Button from '@/components/_ui/_button/Button/Button.tsx';
 import Checkbox from '@/components/_ui/_input/Checkbox/Checkbox.tsx';
 import MobileNumberView from '@/components/MobileNumberView/MobileNumberView.tsx';
 import NumberKeyboard from '@/components/NumberKeyboard/NumberKeyboard.tsx';
-import css
-    from '@/containers/KeyboardNumberFormWithMobileModule/KeyboardNumberFormWithMobileModule.module.scss';
+import css from './KeyboardMobileNumberForm.module.scss';
 import { cn } from '@/helpers/react/classname.helper.ts';
 import { IMobileNumber } from '@/modules/MobileNumber/MobileNumber.interface.ts';
 import { MobileNumberCallbackProps } from '@/modules/MobileNumber/MobileNumber.type.ts';
