@@ -22,7 +22,7 @@ const Checkbox: React.FC<CheckboxProps> = (props) => {
     return (
         <div className={ cn(css.container, className) } onClick={ onClickHandler }>
             <div className={ cn(css.box, status && css.checked) }>
-                <div className={ css.mark }>1</div>
+                <div className={ css.mark }>✓</div>
             </div>
             <div className={ css.label }>
                 { label }

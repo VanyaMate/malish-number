@@ -31,7 +31,7 @@ const NumberKeyboard: React.FC<NumberKeyboardProps> = (props) => {
                 <Button onClick={ () => onInput(9) }>9</Button>
             </div>
             <div className={ cn(css.row, css.bottom) }>
-                <Button onClick={ () => onClear() }>Clear</Button>
+                <Button onClick={ () => onClear() }>Очистить</Button>
                 <Button onClick={ () => onInput(0) }>0</Button>
             </div>
         </div>
